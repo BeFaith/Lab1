@@ -1,10 +1,24 @@
 package com.company;
 
-public class Methods {
-    static double Delta = 0.00000001;
-    static double maxN = 100;
+public class Function {
+    public int degreeX;
+    public int multiplierX;
+    double Delta = 0.00000001;
+    double maxN = 100;
 
-    public static Extreme FindExtremeByMethodDichotomy(double intervalMin, double intervalMax, double eps)
+    Function()
+    {
+        degreeX = 5;
+        multiplierX = 5;
+    }
+
+    Function(int degreeX, int multiplierX)
+    {
+        this.degreeX = degreeX;
+        this.multiplierX = multiplierX;
+    }
+
+    public Extreme FindExtremeByMethodDichotomy(double intervalMin, double intervalMax, double eps)
     {
         Extreme res = new Extreme();
         res.setMinimum(Dichotomy(true, intervalMin, intervalMax, eps));
@@ -12,7 +26,7 @@ public class Methods {
         return res;
     }
 
-    public static Extreme FindExtremeByMethodGoldenRatio(double intervalMin, double intervalMax, double eps)
+    public Extreme FindExtremeByMethodGoldenRatio(double intervalMin, double intervalMax, double eps)
     {
         Extreme res = new Extreme();
         res.setMinimum(GoldenRatio(true, intervalMin, intervalMax, eps));
@@ -20,7 +34,7 @@ public class Methods {
         return res;
     }
 
-    public static Extreme FindExtremeByMethodHords(double intervalMin, double intervalMax, double eps)
+    public Extreme FindExtremeByMethodHords(double intervalMin, double intervalMax, double eps)
     {
         Extreme res = new Extreme();
         res.setMinimum(Hords(true, intervalMin, intervalMax, eps));
@@ -28,7 +42,7 @@ public class Methods {
         return res;
     }
 
-    public static double Dichotomy(boolean findMininum, double intervalMin, double intervalMax, double eps)
+    public double Dichotomy(boolean findMininum, double intervalMin, double intervalMax, double eps)
     {
         int n = 0; //число итераций
         double x1 = 0,fx1, x2, fx2, deltan;
@@ -43,9 +57,9 @@ public class Methods {
                 isStop = true;
             }
             x1 = (a + b) / 2 - Delta;
-            fx1 = Math.pow(x1, 5) * Math.sin(5*x1);
+            fx1 = Math.pow(x1, degreeX) * Math.sin(multiplierX*x1);
             x2 = (a + b) / 2 + Delta;
-            fx2 = Math.pow(x2, 5) * Math.sin(5*x2);
+            fx2 = Math.pow(x2, degreeX) * Math.sin(multiplierX*x2);
 
             if(findMininum)
             {
@@ -67,7 +81,7 @@ public class Methods {
         return x1;
     }
 
-    public static double GoldenRatio(boolean findMininum, double intervalMin, double intervalMax, double eps)
+    public double GoldenRatio(boolean findMininum, double intervalMin, double intervalMax, double eps)
     {
         int n = 0;
         double al = 0, fal, bt, fbt, delta;
@@ -83,9 +97,9 @@ public class Methods {
                 break;
             }
             al = a + zc1 * delta;
-            fal = Math.pow(al, 5) * Math.sin(5 * al);
+            fal = Math.pow(al, degreeX) * Math.sin(multiplierX * al);
             bt= a + zc2 * delta;
-            fbt = Math.pow(bt, 5) * Math.sin(5 * bt);
+            fbt = Math.pow(bt, degreeX) * Math.sin(multiplierX * bt);
             if(findMininum)
             {
                 if(fal > fbt)
@@ -106,7 +120,7 @@ public class Methods {
         return al;
     }
 
-    public static double Hords(boolean findMininum, double intervalMin, double intervalMax, double eps)
+    public double Hords(boolean findMininum, double intervalMin, double intervalMax, double eps)
     {
         int n = 0;
         double a = intervalMin;
@@ -116,12 +130,12 @@ public class Methods {
         while(true)
         {
             delta = b - a;
-            fa = 5*Math.pow(a, 4)*Math.sin(5*a) + 5*Math.pow(a, 5)*Math.cos(5*a);
-            fb = 5*Math.pow(b, 4)*Math.sin(5*b) + 5*Math.pow(b, 5)*Math.cos(5*b);
+            fa = degreeX*Math.pow(a, degreeX - 1)*Math.sin(multiplierX*a) + degreeX*Math.pow(a, degreeX)*Math.cos(multiplierX*a);
+            fb = degreeX*Math.pow(b, degreeX - 1)*Math.sin(multiplierX*b) + degreeX*Math.pow(b, degreeX)*Math.cos(multiplierX*b);
             xold = x;
             //x=a-fa*delta/(fb-fa);
             x=b-fb*delta/(fb-fa);
-            fx = Math.pow(x, 5)*Math.sin(5*x);
+            fx = Math.pow(x, degreeX)*Math.sin(multiplierX*x);
             xdelta = Math.abs(x - xold);
             if(fx == 0 || xdelta <= eps)
             {
